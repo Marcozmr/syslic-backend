@@ -1,0 +1,45 @@
+[
+  {
+    "model": "bidding.Requirement",
+    "id": 1,
+    "fields": {
+      "name": "Catálogo"
+    }
+  },
+  {
+    "model": "bidding.Requirement",
+    "id": 2,
+    "fields": {
+      "name": "Visita Técnica"
+    }
+  },
+  {
+    "model": "bidding.Requirement",
+    "id": 3,
+    "fields": {
+      "name": "Amostra"
+    }
+  },
+  {
+    "model": "bidding.Requirement",
+    "id": 4,
+    "fields": {
+      "name": "Anvisa"
+    }
+  },
+  {
+    "model": "bidding.Requirement",
+    "id": 5,
+    "fields": {
+      "name": "Laudos"
+    }
+  },
+  {
+    "model": "bidding.Requirement",
+    "id": 6,
+    "fields": {
+      "name": "Cadastro Nova Plataforma"
+    }
+  }
+]
+

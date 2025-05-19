@@ -1,0 +1,116 @@
+[
+  {
+    "model": "address.AddressType",
+    "id": 1,
+    "fields": {
+      "name": "Alameda"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 2,
+    "fields": {
+      "name": "Avenida"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 3,
+    "fields": {
+      "name": "Chácara"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 4,
+    "fields": {
+      "name": "Colônia"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 5,
+    "fields": {
+      "name": "Condomínio"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 6,
+    "fields": {
+      "name": "Eqnp"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 7,
+    "fields": {
+      "name": "Estância"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 8,
+    "fields": {
+      "name": "Estrada"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 9,
+    "fields": {
+      "name": "Fazenda"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 10,
+    "fields": {
+      "name": "Praça"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 11,
+    "fields": {
+      "name": "Prolongamento"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 12,
+    "fields": {
+      "name": "Rodovia"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 13,
+    "fields": {
+      "name": "Rua"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 14,
+    "fields": {
+      "name": "Sítio"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 15,
+    "fields": {
+      "name": "Travessa"
+    }
+  },
+  {
+    "model": "address.AddressType",
+    "id": 16,
+    "fields": {
+      "name": "Vicinal"
+    }
+  }
+]
+
+

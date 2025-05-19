@@ -1,0 +1,39 @@
+[
+  {
+    "model": "contract.ContractType",
+    "pk": 1,
+    "fields": {
+      "name": "Contrato"
+    }
+  },
+  {
+    "model": "contract.ContractType",
+    "pk": 2,
+    "fields": {
+      "name": "ATA"
+    }
+  },
+  {
+    "model": "contract.ContractType",
+    "pk": 3,
+    "fields": {
+      "name": "Não Encontrado"
+    }
+  },
+  {
+    "model": "contract.ContractType",
+    "pk": 4,
+    "fields": {
+      "name": "Sem ATA"
+    }
+  },
+  {
+    "model": "contract.ContractType",
+    "pk": 5,
+    "fields": {
+      "name": "Empenho"
+    }
+  }
+]
+
+

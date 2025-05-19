@@ -1,0 +1,83 @@
+[
+  {
+    "model": "product.Unity",
+    "id": 1,
+    "fields": {
+      "unity": "Unidade",
+      "symbol": "unid"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 2,
+    "fields": {
+      "unity": "Gramas",
+      "symbol": "g"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 3,
+    "fields": {
+      "unity": "Quilogramas",
+      "symbol": "kg"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 4,
+    "fields": {
+      "unity": "Toneladas",
+      "symbol": "ton"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 5,
+    "fields": {
+      "unity": "Centimetro",
+      "symbol": "cm"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 6,
+    "fields": {
+      "unity": "Metro",
+      "symbol": "m"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 10,
+    "fields": {
+      "unity": "Litro",
+      "symbol": "l"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 26,
+    "fields": {
+      "unity": "Conjunto",
+      "symbol": "cj"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 27,
+    "fields": {
+      "unity": "Caixa",
+      "symbol": "cx"
+    }
+  },
+  {
+    "model": "product.Unity",
+    "id": 46,
+    "fields": {
+      "unity": "Kit",
+      "symbol": "kit"
+    }
+  }
+]
+

@@ -1,0 +1,38 @@
+[
+  {
+    "model": "bidding.Dispute",
+    "id": 1,
+    "fields": {
+      "name": "Aberto"
+    }
+  },
+  {
+    "model": "bidding.Dispute",
+    "id": 2,
+    "fields": {
+      "name": "Aberto Fechado"
+    }
+  },
+  {
+    "model": "bidding.Dispute",
+    "id": 3,
+    "fields": {
+      "name": "Fechado Aberto"
+    }
+  },
+  {
+    "model": "bidding.Dispute",
+    "id": 4,
+    "fields": {
+      "name": "Fechado"
+    }
+  },
+  {
+    "model": "bidding.Dispute",
+    "id": 5,
+    "fields": {
+      "name": "Randômico"
+    }
+  }
+]
+

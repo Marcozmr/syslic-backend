@@ -1,0 +1,108 @@
+[
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 1,
+    "fields": {
+      "nome": "Leilão - Eletrônico",
+      "codigo": 1
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 2,
+    "fields": {
+      "nome": "Diálogo Competitivo",
+      "codigo": 2
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 3,
+    "fields": {
+      "nome": "Concurso",
+      "codigo": 3
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 4,
+    "fields": {
+      "nome": "Concorrência - Eletrônica",
+      "codigo": 4
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 5,
+    "fields": {
+      "nome": "Concorrência - Presencial",
+      "codigo": 5
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 6,
+    "fields": {
+      "nome": "Pregão - Eletrônico",
+      "codigo": 6
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 7,
+    "fields": {
+      "nome": "Pregão - Presencial",
+      "codigo": 7
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 8,
+    "fields": {
+      "nome": "Dispensa de Licitação",
+      "codigo": 8
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 9,
+    "fields": {
+      "nome": "Inexigibilidade",
+      "codigo": 9
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 10,
+    "fields": {
+      "nome": "Manifestação de Interesse",
+      "codigo": 10
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 11,
+    "fields": {
+      "nome": " Pré-qualificação",
+      "codigo": 11
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 12,
+    "fields": {
+      "nome": "Credenciamento",
+      "codigo": 12
+    }
+  },
+  {
+    "model": "pncp.HiringModalitie",
+    "id": 13,
+    "fields": {
+      "nome": "Leilão - Presencial",
+      "codigo": 13
+    }
+  }
+]
+
+

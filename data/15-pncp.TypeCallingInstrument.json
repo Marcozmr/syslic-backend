@@ -1,0 +1,20 @@
+[
+  {
+    "model": "pncp.TypeCallingInstrument",
+    "id": 1,
+    "fields": {
+      "nome": "Edital",
+      "codigo": 1
+    }
+  },
+  {
+    "model": "pncp.TypeCallingInstrument",
+    "id": 2,
+    "fields": {
+      "nome": "Aviso de Contratação Direta",
+      "codigo": 2
+    }
+  }
+]
+
+

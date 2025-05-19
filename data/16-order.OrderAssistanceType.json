@@ -1,0 +1,23 @@
+[
+    {
+        "model": "order.OrderAssistanceType",
+        "pk": 1,
+        "fields": {
+            "name": "Montagem/Instalação"
+        }
+    },
+    {
+        "model": "order.OrderAssistanceType",
+        "pk": 2,
+        "fields": {
+            "name": "Assistência Técnica"
+        }
+    },
+    {
+        "model": "order.OrderAssistanceType",
+        "pk": 3,
+        "fields": {
+            "name": "Treinamento"
+        }
+    }
+]

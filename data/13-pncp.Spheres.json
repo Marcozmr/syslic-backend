@@ -1,0 +1,44 @@
+[
+  {
+    "model": "pncp.Spheres",
+    "id": 1,
+    "fields": {
+      "nome": "Federal",
+      "codigo": "F"
+    }
+  },
+  {
+    "model": "pncp.Spheres",
+    "id": 2,
+    "fields": {
+      "nome": "Estadual",
+      "codigo": "E"
+    }
+  },
+  {
+    "model": "pncp.Spheres",
+    "id": 3,
+    "fields": {
+      "nome": "Municipal",
+      "codigo": "M"
+    }
+  },
+  {
+    "model": "pncp.Spheres",
+    "id": 4,
+    "fields": {
+      "nome": "Não se aplica",
+      "codigo": "N"
+    }
+  },
+  {
+    "model": "pncp.Spheres",
+    "id": 5,
+    "fields": {
+      "nome": "Distrital",
+      "codigo": "D"
+    }
+  }
+]
+
+

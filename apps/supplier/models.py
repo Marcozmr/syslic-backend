@@ -1,0 +1,188 @@
+from django.db import models
+from django.db.models import UniqueConstraint
+from django.db.models import ProtectedError
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+
+from django_cpf_cnpj.fields import CNPJField
+from apps.utils.phone_validator import phone_regex
+
+from django_multitenant.models import TenantModel
+from django_multitenant.fields import TenantForeignKey
+
+from apps.address.models import (
+        Country,
+        State,
+        City,
+        AddressType,
+        NeighborhoodType,
+)
+
+from apps.accounts.models import (
+    Profile,
+    Account,
+    AccountTenantManager,
+)
+
+from apps.transport.models import (
+    Freight,
+)
+
+class Category(TenantModel):
+    objects = AccountTenantManager()
+
+    name = models.CharField(max_length=100,
+                            blank=False,
+                            null=False)
+
+    account = models.ForeignKey(Account,
+                                on_delete=models.CASCADE,
+                                blank=False,
+                                null=False,
+                                related_name='SupplierCategory')
+
+    class Meta:
+        unique_together = (
+            'id',
+            'account',
+        )
+        constraints = [
+            UniqueConstraint(fields=['id', 'account'], name='unique_supplier_category_id_account'),
+            UniqueConstraint(fields=['name', 'account'], name='unique_supplier_category_name_account'),
+        ]
+
+    class TenantMeta:
+        tenant_field_name = "account_id"
+
+@receiver(pre_delete, sender=Category)
+def protect_author_from_delete(sender, instance, **kwargs):
+    if instance.suppliers.exists():
+        raise ProtectedError("Cannot delete category because they are referenced by one or more suppliers.", instance.suppliers.none())
+
+class Supplier(TenantModel):
+    name = models.CharField(max_length=100,
+                            blank=False,
+                            null=False)
+
+    name_fantasy = models.CharField(max_length=100,
+                                    blank=True,
+                                    null=True)
+
+    cnpj = CNPJField(max_length=50,
+                     blank=True,
+                     null=True)
+
+    ie = models.CharField(max_length=50,
+                          blank=True,
+                          null=True)
+
+    im = models.CharField(max_length=50,
+                          blank=True,
+                          null=True)
+
+    email = models.EmailField(blank=True,
+                              null=True)
+
+
+    phone_number = models.CharField(validators=[phone_regex],
+                                    max_length=17,
+                                    blank=True,
+                                    null=True)
+
+    address_type = models.ForeignKey(AddressType,
+                                     on_delete=models.PROTECT,
+                                     blank=True,
+                                     null=True)
+
+    address = models.CharField(max_length=255,
+                               blank=True,
+                               null=True)
+
+    neighborhood_type = models.ForeignKey(NeighborhoodType,
+                                          on_delete=models.PROTECT,
+                                          blank=True,
+                                          null=True)
+
+    neighborhood = models.CharField(max_length=50,
+                                    blank=True,
+                                    null=True)
+
+    number = models.CharField(max_length=50,
+                              blank=True,
+                              null=True)
+
+    complement = models.CharField(max_length=1050,
+                                  blank=True,
+                                  null=True)
+
+    city = models.ForeignKey(City,
+                             on_delete=models.PROTECT,
+                             blank=True,
+                             null=True)
+
+    state = models.ForeignKey(State,
+                              on_delete=models.PROTECT,
+                              blank=True,
+                              null=True)
+
+    country = models.ForeignKey(Country,
+                                on_delete=models.PROTECT,
+                                blank=True,
+                                null=True)
+
+    zip_code = models.CharField(max_length=50,
+                                blank=True,
+                                null=True)
+
+    responsible = models.ForeignKey(Profile,
+                                    on_delete=models.PROTECT,
+                                    blank=True,
+                                    null=True)
+
+    category = models.ManyToManyField(Category,
+                                      blank=True,
+                                      related_name='suppliers')
+
+    pix_key = models.CharField(max_length=100,
+                               blank=True,
+                               null=True)
+
+    account_owner = models.CharField(max_length=100,
+                                     blank=True,
+                                     null=True)
+
+    bank_name = models.CharField(max_length=100,
+                            blank=True,
+                            null=True)
+
+    bank_agency = models.CharField(max_length=30,
+                                    blank=True,
+                                    null=True)
+
+    bank_account = models.CharField(max_length=30,
+                                    blank=True,
+                                    null=True)
+    
+    region_freight = TenantForeignKey(Freight,
+                                      on_delete=models.PROTECT,
+                                      blank=True,
+                                      null=True)
+
+    account = models.ForeignKey(Account,
+                                on_delete=models.CASCADE,
+                                blank=False,
+                                null=False,
+                                related_name='Supplier')
+
+    class Meta:
+        unique_together = (
+            'id',
+            'account',
+        )
+        constraints = [
+            UniqueConstraint(fields=['id', 'account'], name='unique_supplier_id_account'),
+            UniqueConstraint(fields=['cnpj', 'account'], name='unique_supplier_cnpj_account'),
+        ]
+
+    class TenantMeta:
+        tenant_field_name = "account_id"

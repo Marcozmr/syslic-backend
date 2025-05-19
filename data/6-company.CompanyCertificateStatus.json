@@ -1,0 +1,28 @@
+[
+  {
+    "model": "company.CompanyCertificateStatus",
+    "id": 1,
+    "fields": {
+      "name": "Autenticado",
+      "color": "#219753"
+    }
+  },
+  {
+    "model": "company.CompanyCertificateStatus",
+    "id": 2,
+    "fields": {
+      "name": "Não Autenticado",
+      "color": "#E2445C"
+    }
+  },
+  {
+    "model": "company.CompanyCertificateStatus",
+    "id": 3,
+    "fields": {
+      "name": "Em processo",
+      "color": "#FF7A00"
+    }
+  }
+]
+
+

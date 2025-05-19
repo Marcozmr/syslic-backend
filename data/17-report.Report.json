@@ -1,0 +1,22 @@
+[
+    {
+        "model": "report.Report",
+        "pk": 1,
+        "fields": {
+            "name": "Licitações - Visão Geral",
+            "module": "bidding",
+            "superset_id": "a417a000-6c3c-4bf2-85b4-39c047f6c4c0",
+            "default": false
+        }
+    },
+    {
+        "model": "report.Report",
+        "pk": 2,
+        "fields": {
+            "name": "Pedidos - Visão Geral",
+            "module": "order",
+            "superset_id": "45a44f98-b383-46a4-a617-f87606f0a272",
+            "default": true
+        }
+    }
+]

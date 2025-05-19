@@ -1,0 +1,36 @@
+[
+  {
+    "model": "pncp.Powers",
+    "id": 1,
+    "fields": {
+      "nome": "Executivo",
+      "codigo": "E"
+    }
+  },
+  {
+    "model": "pncp.Powers",
+    "id": 2,
+    "fields": {
+      "nome": "Judiciário",
+      "codigo": "J"
+    }
+  },
+  {
+    "model": "pncp.Powers",
+    "id": 3,
+    "fields": {
+      "nome": "Legislativo",
+      "codigo": "L"
+    }
+  },
+  {
+    "model": "pncp.Powers",
+    "id": 4,
+    "fields": {
+      "nome": "Não se aplica",
+      "codigo": "N"
+    }
+  }
+]
+
+

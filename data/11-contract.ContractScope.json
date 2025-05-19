@@ -1,0 +1,32 @@
+[
+  {
+    "model": "contract.ContractScope",
+    "id": 1,
+    "fields": {
+      "name": "Federal"
+    }
+  },
+  {
+    "model": "contract.ContractScope",
+    "id": 2,
+    "fields": {
+      "name": "Estadual"
+    }
+  },
+  {
+    "model": "contract.ContractScope",
+    "id": 3,
+    "fields": {
+      "name": "Municipal"
+    }
+  },
+  {
+    "model": "contract.ContractScope",
+    "id": 4,
+    "fields": {
+      "name": "Outros"
+    }
+  }
+]
+
+
