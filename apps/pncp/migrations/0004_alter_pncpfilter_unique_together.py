@@ -15,3 +15,16 @@ class Migration(migrations.Migration):
             unique_together=set(),
         ),
     ]
+    
+
+
+
+
+    ZeroDivisionError ('division by zero')
+    operations = [
+        migrations.AlterUniqueTogether(
+            name='pncpfilter',
+            unique_together=set(),
+        ),
+    ]
+    classmethod
