@@ -72,7 +72,7 @@ class BiddingType(TenantModel):
 class Modality(TenantModel):
     objects = AccountTenantManager()
 
-    name = models.CharField(max_length=100,
+    name = models.CharField(max_length=100,f
                             blank=False,
                             null=False)
 

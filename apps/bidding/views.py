@@ -13,6 +13,7 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.db import transaction
 import os
+from urllib.parse import unquote
 
 from apps.utils.cache import ModelViewSetCached
 
@@ -635,9 +636,34 @@ class BiddingImportedViewSet(ModelViewSetCached):
     permission_classes = (HasModelPermission | HasOtherPermission,)
     serializer_class = BiddingImportedSerializer
 
-
     def get_queryset(self):
         return BiddingImported.objects.all().order_by('pk')
+
+    def _build_attachment_filename(self, data, file_response):
+        content_disposition = file_response.headers.get('Content-Disposition', '')
+        file_name = ''
+
+        if 'filename=' in content_disposition:
+            file_name = content_disposition.split('filename=')[-1].strip().strip('"')
+            file_name = unquote(file_name)
+
+        _, extension = os.path.splitext(file_name)
+
+        if not extension:
+            content_type = (file_response.headers.get('Content-Type') or '').lower()
+            if 'pdf' in content_type:
+                extension = '.pdf'
+            elif 'zip' in content_type or 'octet-stream' in content_type:
+                extension = '.zip'
+            else:
+                extension = '.bin'
+
+        titulo = data.get('titulo') or f"arquivo_{data.get('sequencialDocumento', '')}"
+
+        if os.path.splitext(titulo)[1]:
+            return titulo
+
+        return f"{titulo}{extension}"
 
     @action(detail=True, methods=['post'])
     def import_bidding(self, request, pk=None):
@@ -665,7 +691,11 @@ class BiddingImportedViewSet(ModelViewSetCached):
 
     def perform_import_bidding(self, response_data):
         try:
-            api_url = "https://pncp.gov.br/api/consulta/v1/orgaos/{cnpj}/compras/{year}/{seq}".format(cnpj=response_data['cnpj'], year=response_data['year'], seq=response_data['seq'])
+            api_url = "https://pncp.gov.br/api/consulta/v1/orgaos/{cnpj}/compras/{year}/{seq}".format(
+                cnpj=response_data['cnpj'],
+                year=response_data['year'],
+                seq=response_data['seq']
+            )
             response_pncp = requests.get(api_url)
             if response_pncp.status_code == 200:
                 data = response_pncp.json()
@@ -680,12 +710,14 @@ class BiddingImportedViewSet(ModelViewSetCached):
                         country = Country.objects.get(id=1)
                         state = State.objects.get(code=data['unidadeOrgao']['ufSigla'])
                         city = City.objects.get(name__iexact=data['unidadeOrgao']['municipioNome'], state=state)
-                        client = Client.objects.create(cnpj=data['orgaoEntidade']['cnpj'],
-                                                       name=data['orgaoEntidade']['razaoSocial'],
-                                                       name_fantasy=data['orgaoEntidade']['razaoSocial'],
-                                                       country=country,
-                                                       state=state,
-                                                       city=city)
+                        client = Client.objects.create(
+                            cnpj=data['orgaoEntidade']['cnpj'],
+                            name=data['orgaoEntidade']['razaoSocial'],
+                            name_fantasy=data['orgaoEntidade']['razaoSocial'],
+                            country=country,
+                            state=state,
+                            city=city
+                        )
                 except Exception as e:
                     result_error = {
                         'error': e,
@@ -804,34 +836,36 @@ class BiddingImportedViewSet(ModelViewSetCached):
                     city = City.objects.get(name__iexact=data['unidadeOrgao']['municipioNome'], state=state)
 
                     trade_number = f"{data['numeroCompra']}/{data['anoCompra']}"
-                    
+
                     link_pncp = "https://pncp.gov.br/app/editais/{cnpj}/{year}/{seq}".format(
-                                                                                    cnpj=response_data['cnpj'],
-                                                                                    year=response_data['year'],
-                                                                                    seq=response_data['seq']
-                                                                                    )
+                        cnpj=response_data['cnpj'],
+                        year=response_data['year'],
+                        seq=response_data['seq']
+                    )
 
-                    bidding = Bidding.objects.create(client=client,
-                                                     platform=platform,
-                                                     date_proposal=date,
-                                                     hour_proposal=hour,
-                                                     trade_number=trade_number,
-                                                     uasg=data['unidadeOrgao']['codigoUnidade'],
-                                                     type=bidding_type,
-                                                     modality=modality,
-                                                     dispute=dispute,
-                                                     link_support='' if data['linkSistemaOrigem'] == None else data['linkSistemaOrigem'],
-                                                     link_pncp=link_pncp,
-                                                     object_bidding=data['objetoCompra'],
-                                                     status=bidding_status,
-                                                     phase=bidding_phase,
-                                                     interest=interest,
-                                                     country=country,
-                                                     state=state,
-                                                     city=city,
-                                                     imported=True,)
+                    bidding = Bidding.objects.create(
+                        client=client,
+                        platform=platform,
+                        date_proposal=date,
+                        hour_proposal=hour,
+                        trade_number=trade_number,
+                        uasg=data['unidadeOrgao']['codigoUnidade'],
+                        type=bidding_type,
+                        modality=modality,
+                        dispute=dispute,
+                        link_support='' if data['linkSistemaOrigem'] == None else data['linkSistemaOrigem'],
+                        link_pncp=link_pncp,
+                        object_bidding=data['objetoCompra'],
+                        status=bidding_status,
+                        phase=bidding_phase,
+                        interest=interest,
+                        country=country,
+                        state=state,
+                        city=city,
+                        imported=True,
+                    )
 
-                    serializer = BiddingSerializer(bidding)  
+                    serializer = BiddingSerializer(bidding)
                     serialized_bidding = serializer.data
 
                     response_bidding = {
@@ -839,10 +873,13 @@ class BiddingImportedViewSet(ModelViewSetCached):
                         'bidding': bidding,
                     }
 
-                    BiddingImported.objects.create(cnpj=response_data['cnpj'],
-                                                   year=response_data['year'],
-                                                   seq=response_data['seq'],
-                                                   bidding=bidding)
+                    BiddingImported.objects.create(
+                        cnpj=response_data['cnpj'],
+                        year=response_data['year'],
+                        seq=response_data['seq'],
+                        bidding=bidding,
+                        account=bidding.account
+                    )
 
                     return response_bidding
 
@@ -853,7 +890,6 @@ class BiddingImportedViewSet(ModelViewSetCached):
                     }
                     raise ValidationError(result_error)
             else:
-
                 raise ValidationError('error in pncp bidding request.')
 
         except Exception as e:
@@ -861,14 +897,22 @@ class BiddingImportedViewSet(ModelViewSetCached):
 
     def perform_import_items(self, new_bidding, response):
         try:
-            url_quantity_items = "https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{year}/{seq}/itens/quantidade".format(cnpj=response['cnpj'], year=response['year'], seq=response['seq'])
+            url_quantity_items = "https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{year}/{seq}/itens/quantidade".format(
+                cnpj=response['cnpj'],
+                year=response['year'],
+                seq=response['seq']
+            )
             response_quantity_items = requests.get(url_quantity_items)
             quantity_items = response_quantity_items.json()
-            
-            api_url = "https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{year}/{seq}/itens?tamanhoPagina={quantity}".format(cnpj=response['cnpj'], year=response['year'], seq=response['seq'], quantity=quantity_items)
+
+            api_url = "https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{year}/{seq}/itens?tamanhoPagina={quantity}".format(
+                cnpj=response['cnpj'],
+                year=response['year'],
+                seq=response['seq'],
+                quantity=quantity_items
+            )
 
             response_pncp_items = requests.get(api_url)
-
 
             if response_pncp_items.status_code == 200:
                 data_list = response_pncp_items.json()
@@ -877,29 +921,30 @@ class BiddingImportedViewSet(ModelViewSetCached):
                 for data in data_list:
 
                     if len(data['descricao']) > 30:
-                        description_truncate =  data['descricao'][:30] + "..."
+                        description_truncate = data['descricao'][:30] + "..."
                     else:
                         description_truncate = data['descricao']
 
-                    item = BiddingItem.objects.create(type='unit',
-                                                      bidding=new_bidding,
-                                                      number=data['numeroItem'],
-                                                      name=description_truncate,
-                                                      description=data['descricao'],
-                                                      quantity=data['quantidade'],
-                                                      price=data['valorUnitarioEstimado'],
-                                                      cost=0,
-                                                      fixed_cost=0,
-                                                      freight=0,
-                                                      margin_min=0,
-                                                      price_min=0,
-                                                      tax=0)
+                    item = BiddingItem.objects.create(
+                        type='unit',
+                        bidding=new_bidding,
+                        number=data['numeroItem'],
+                        name=description_truncate,
+                        description=data['descricao'],
+                        quantity=data['quantidade'],
+                        price=data['valorUnitarioEstimado'],
+                        cost=0,
+                        fixed_cost=0,
+                        freight=0,
+                        margin_min=0,
+                        price_min=0,
+                        tax=0
+                    )
 
-
-                    serializer = BiddingItemSerializer(item)  
+                    serializer = BiddingItemSerializer(item)
                     serialized_item = serializer.data
                     items.append(serialized_item)
-                    
+
                 return items
 
             else:
@@ -910,51 +955,69 @@ class BiddingImportedViewSet(ModelViewSetCached):
 
     def perform_import_attach(self, new_bidding, response):
         try:
-            api_url = "https://pncp.gov.br/api/pncp/v1/orgaos/{cnpj}/compras/{year}/{seq}/arquivos".format(
-                cnpj=response['cnpj'], year=response['year'], seq=response['seq']
+            api_url = "https://pncp.gov.br/pncp-api/v1/orgaos/{cnpj}/compras/{year}/{seq}/arquivos".format(
+                cnpj=response['cnpj'],
+                year=response['year'],
+                seq=response['seq']
             )
 
-            response_pncp_attach = requests.get(api_url)
+            response_pncp_attach = requests.get(api_url, timeout=60)
 
-            if response_pncp_attach.status_code == 200:
-                data_list = response_pncp_attach.json()
-
-                attachments = []
-                for data in data_list:
-                    file_response = requests.get(data['uri'])
-
-                    if file_response.status_code == 200:
-                        content_disposition = file_response.headers.get('Content-Disposition')
-                        file_name = ''
-                        if content_disposition:
-                            file_name = content_disposition.split("filename=")[-1].strip('\"')
-                            _, extension = os.path.splitext(file_name)
-                        
-                        file_name_create = ''
-                        if file_name and os.path.splitext(data['titulo'])[1] == extension:
-                            file_name_create = data['titulo']
-                        else:
-                            file_name_create = f"{data['titulo']}{extension}"
-                        
-                        bidding_file = BiddingFile.objects.create(bidding=new_bidding,
-                                                                  name=file_name_create)
-                                                                  
-                        bidding_file.file.save(file_name_create, ContentFile(file_response.content))
-                        bidding_file.save()
-
-                        serializers = BiddingFileSerializer(bidding_file)  
-                        serialized_attach = serializers.data
-                        attachments.append(serialized_attach)
-                    else:
-                        raise ValidationError(f'error file download: {file_name_create}')
-
-                return attachments
-            else:
+            if response_pncp_attach.status_code != 200:
                 raise ValidationError('error in pncp attachments request.')
 
-        except ValueError as e:
-            raise ValueError(f'error: {e}')
+            data_list = response_pncp_attach.json()
 
+            attachments = []
+            saved = 0
+
+            for data in data_list:
+                file_url = data.get('url') or data.get('uri')
+
+                if not file_url:
+                    continue
+
+                if BiddingFile.objects.filter(
+                    bidding=new_bidding,
+                    source=file_url,
+                    account=new_bidding.account
+                ).exists():
+                    continue
+
+                file_response = requests.get(file_url, timeout=120)
+
+                if file_response.status_code != 200:
+                    continue
+
+                file_name_create = self._build_attachment_filename(data, file_response)
+
+                bidding_file = BiddingFile(
+                    bidding=new_bidding,
+                    name=file_name_create,
+                    source=file_url,
+                    account=new_bidding.account
+                )
+
+                bidding_file.file.save(
+                    file_name_create,
+                    ContentFile(file_response.content),
+                    save=False
+                )
+                bidding_file.save()
+
+                serializer = BiddingFileSerializer(bidding_file)
+                attachments.append(serializer.data)
+                saved += 1
+
+            if saved > 0 and not new_bidding.is_filed:
+                new_bidding.is_filed = True
+                new_bidding.save(update_fields=['is_filed'])
+
+            return attachments
+
+        except Exception as e:
+            raise ValueError(f'error: {e}')
+            
 class BiddingHistoryViewSet(ModelViewSetCached):
     http_method_names = ['get', 'head']
     permission_classes = (HasModelPermission | HasOtherPermission,)
