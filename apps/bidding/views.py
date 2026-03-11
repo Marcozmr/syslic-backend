@@ -1007,9 +1007,9 @@ class BiddingImportedViewSet(ModelViewSetCached):
 
                 serializer = BiddingFileSerializer(bidding_file)
                 attachments.append(serializer.data)
-                saved += 1
-
-            if saved > 0 and not new_bidding.is_filed:
+                saved += 
+                
+            if BiddingFile.objects.filter(bidding=new_bidding).exists() and not new_bidding.is_filed:
                 new_bidding.is_filed = True
                 new_bidding.save(update_fields=['is_filed'])
 
